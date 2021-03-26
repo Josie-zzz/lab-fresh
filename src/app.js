@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import './app.scss'
-
+//引入主题样式
+import './custom-theme.scss'
 class App extends Component {
 
   componentDidMount () {}
