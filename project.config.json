@@ -4,7 +4,7 @@
   "description": "这是我的毕设，网协纳新小程序",
   "appid": "wxe1f14c2fcbea5306",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "enhance": false,
     "postcss": false,
@@ -40,5 +40,6 @@
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
+  "libVersion": "2.16.0",
   "condition": {}
 }

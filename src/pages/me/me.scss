@@ -4,10 +4,15 @@
     width: 100%;
     background-color: #4e73ba;
     display: flex;
-    align-items: center;
     padding: 0 30px;
-    margin-bottom: 20px;
     box-sizing: border-box;
+    align-items: center;
+    justify-content: space-between;
+
+    .left {
+      display: flex;
+      align-items: center;
+    }
 
     text {
       color: #fff;
@@ -25,5 +30,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 20px;
+  }
+
+  .login_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .at-icon {
+      display: block;
+    }
   }
 }
