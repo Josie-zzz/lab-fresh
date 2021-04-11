@@ -8,17 +8,20 @@ class App extends Component {
     super()
     //全局变量设置
     this.state = {
-      loginStatus: 0,         //登陆状态 0未登陆，非0是登陆
       userInfo: null,   //记录用户信息
-      // openid: ''
+      studentNum: '',
     }
   }
 
-  updateUser = (loginStatus, userInfo) => {
+  updateUser = (userInfo) => {
     this.setState({
-      loginStatus: loginStatus || this.state.loginStatus, 
-      userInfo: userInfo || this.state.userInfo,
-      // openid: openid || this.state.openid
+      userInfo
+    })
+  }
+
+  updateStudentNum = (studentNum) => {
+    this.setState({
+      studentNum
     })
   }
 
@@ -32,7 +35,8 @@ class App extends Component {
   render () {
     let obj = {
       ...this.state, 
-      updateUser: this.updateUser
+      updateUser: this.updateUser,
+      updateStudentNum: this.updateStudentNum
     }
     return (
       <AppContext.Provider value={obj}>

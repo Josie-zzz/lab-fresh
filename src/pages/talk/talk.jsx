@@ -3,8 +3,8 @@ import Taro from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import { AtTabs, AtTabsPane, AtIcon, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtTextarea, AtMessage } from 'taro-ui'
 import './talk.scss'
-import Discuss from '../../components/discuss'
-import {AppContext} from '../../context'
+import Discuss from '@/components/discuss'
+import {AppContext} from '@/context'
 
 const tabList = [{ title: '交流贴' }, { title: '就业贴' }]
 
@@ -12,15 +12,8 @@ export default class Talk extends Component {
   static contextType = AppContext
 
   state = {
-    current: 0,
     isOpened: false,
     value: ''
-  }
-
-  handleClick(value) {
-    this.setState({
-      current: value
-    })
   }
 
   changeModal(bool){
@@ -73,32 +66,20 @@ export default class Talk extends Component {
   }
 
   render () {
-    const {current, isOpened, value} = this.state
-    let currentTxt = '交流贴'
-    if(current == 1)[
-      currentTxt = '就业贴'
-    ]
+    const {isOpened, value} = this.state
 
     return (
       <View className='talk'>
         <AtMessage />
-        <AtTabs current={current} tabList={tabList} onClick={this.handleClick.bind(this)}>
-          {
-            tabList.map((val, index) => (
-              <AtTabsPane current={current} index={index} >
-                <View className='content'>
-                  <Discuss></Discuss>
-                  <Discuss></Discuss>
-                </View>
-              </AtTabsPane>
-            ))
-          }
-        </AtTabs>
+        <View className='content'>
+          <Discuss></Discuss>
+          <Discuss></Discuss>
+        </View>
         <Button className='btn_fixed' circle type='primary' onClick={() => this.changeModal(true)}>
           <AtIcon value='add' color='#fff'></AtIcon>
         </Button>
         <AtModal isOpened={isOpened}>
-          <AtModalHeader>{currentTxt}</AtModalHeader>
+          <AtModalHeader>发布帖子</AtModalHeader>
           <AtModalContent>
             <AtTextarea
               value={value}

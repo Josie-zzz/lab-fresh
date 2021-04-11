@@ -1,15 +1,17 @@
 export default {
   pages: [
+    'pages/login/login',
+    'pages/home/home',
     'pages/me/me',
     'pages/talk/talk',
-    'pages/home/home',
     'pages/brief/brief',
     'pages/fresh/fresh',
     'pages/competition/competition',
     'pages/works/works',
     'pages/member/member',
-    'pages/notice/notice',
-    'pages/login/login'
+    'pages/job/job',
+    'pages/info/info',
+    'pages/direction/direction'
   ],
   window: {
     backgroundTextStyle: 'light',

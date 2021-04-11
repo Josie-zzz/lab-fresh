@@ -1,9 +1,10 @@
 import { Component } from 'react'
 import { View, Swiper, SwiperItem, Image, Text } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { AtIcon } from 'taro-ui'
 import './home.scss'
-import Card from '../../components/card'
+import Card from '@/components/card'
+import {AppContext} from '@/context'
 
 //轮播图，后期有时间可以做成请求后端接口的
 const pic = ['pic1.jpeg', 'pic2.jpg', 'pic3.jpg']
@@ -31,28 +32,17 @@ const pages = [
     icon: 'file-code',
     path: '/pages/works/works'
   },
+  {
+    name: '就业管理',
+    icon: 'credit-card',
+    path: '/pages/job/job'
+  },
 ]
 
 export default class Home extends Component {
+  static contextType = AppContext
+
   state = {
-    notice: [
-      {
-        text: '劳斯莱斯是劳斯莱斯劳斯莱斯劳斯莱斯李老师了',
-        time: '2021-3-28'
-      },
-      {
-        text: '劳斯莱斯是劳斯莱斯劳斯莱斯劳斯莱斯李老师了',
-        time: '2021-3-28'
-      },
-      {
-        text: '劳斯莱斯是劳斯莱斯劳斯莱斯劳斯莱斯李老师了',
-        time: '2021-3-28'
-      },
-      {
-        text: '劳斯莱斯是劳斯莱斯劳斯莱斯劳斯莱斯李老师了',
-        time: '2021-3-28'
-      }
-    ]
   }
 
   toLink(path){
@@ -61,8 +51,21 @@ export default class Home extends Component {
     })
   }
 
+  componentDidMount(){
+    const {studentNum, updateUser} =this.context
+    Taro.request({
+      url: `http://127.0.0.1:3009/login/info?studentNum=${studentNum}`,
+      success(res){
+        const {status, userInfo} = res.data
+        if(status){
+          updateUser(userInfo)
+        }
+      }
+    })
+  }
+
   render () {
-    const { notice } = this.state
+    const {  } = this.state
     return (
       <View className='home'>
         <Swiper
@@ -91,30 +94,16 @@ export default class Home extends Component {
 
                 return (
                   <View className='box' style={{backgroundColor: color}} onClick={() => this.toLink(val.path)}>
-                    <AtIcon className='icon' value={val.icon} color='#fff' size='24'></AtIcon>
-                    <Text>{val.name}</Text>
+                    <View className='left'>
+                      <AtIcon className='icon' value={val.icon} color='#fff' size='24'></AtIcon>
+                      <Text>{val.name}</Text>
+                    </View>
+                    <AtIcon value='chevron-right' size='30' color='#fff'></AtIcon>
                   </View>
                 )
               })
             }
           </View>
-        </Card>
-        <Card title='通知' more='更多' color='#89acee' toGo='/pages/notice/notice'>
-          {
-            notice.map((val, index) => {
-              let borderBottom = 'dashed 1px #e2e2e2c5'
-              if(index == notice.length - 1){
-                borderBottom = 'none'
-              }
-
-              return (
-                <View className='text' style={{borderBottom}}>
-                  <View className='txt'>{val.text}</View>
-                  <View className='time'>{val.time}</View>
-                </View>
-              )
-            })
-          }
         </Card>
       </View>
     )

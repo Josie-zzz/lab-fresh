@@ -1,3 +1,4 @@
+const path = require('path')
 const config = {
   projectName: 'lab-fresh',
   date: '2021-3-7',
@@ -9,6 +10,9 @@ const config = {
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
+  alias: {              //用于配置目录别名，方便书写
+    '@': path.resolve(__dirname, '..', 'src')
+  },
   plugins: [],
   defineConstants: {
   },

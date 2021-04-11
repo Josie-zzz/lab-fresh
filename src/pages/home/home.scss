@@ -8,43 +8,32 @@
 
   .many-page {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 30px;
     padding-bottom: 0;
+    background-color: #fff;
     
     .box {
-      width: 200px;
-      height: 200px;
+      height: 150px;
       color: #fff;
       margin-bottom: 30px;
       border-radius: 10px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      padding: 0 30px;
 
-      .icon {
-        margin-bottom: 15px;
+      .left {
+        display: flex;
+        align-items: center;
+        font-size: 36px;
+
+        .icon {
+          margin-right: 30px;
+        }
       }
-    }
-  }
-
-  .text {
-    padding: 30px;
-    font-size: 30px;
-    display: flex;
-    justify-content: space-between;
-
-    .txt {
-      overflow: hidden;
-      text-overflow:ellipsis;
-      white-space: nowrap;
-    }
-
-    .time {
-      width: 220px; 
-      text-align: right;
     }
   }
 }

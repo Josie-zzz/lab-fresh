@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '登陆'
+  navigationBarTitleText: '网络科技协会管理平台'
 }

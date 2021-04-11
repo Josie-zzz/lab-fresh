@@ -1,0 +1,28 @@
+.member {
+  .search{
+    margin-bottom: 30px;
+    .at-list__item-content {
+      color: #5474b5;
+    }
+  }
+  
+  .all {
+    .at-accordion__header {
+      background-color: #fff;
+    }
+  }
+}
+
+.member_err {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .at-icon {
+    font-size: 100px !important;
+  }
+}
