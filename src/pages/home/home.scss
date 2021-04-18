@@ -6,34 +6,39 @@
     height: 400px;
   }
 
-  .many-page {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 30px;
-    padding-bottom: 0;
-    background-color: #fff;
-    
-    .box {
-      height: 150px;
-      color: #fff;
-      margin-bottom: 30px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 30px;
-
-      .left {
-        display: flex;
-        align-items: center;
-        font-size: 36px;
-
-        .icon {
-          margin-right: 30px;
-        }
-      }
-    }
+  .group {
+    text-indent: 2em;
+    color: #666;
+    font-size: 30px; 
   }
+  
+  .standard {
+    color: #666;
+    font-size: 30px; 
+    line-height: 46px;
+  }
+}
+
+.at-article__jianjie {
+  text-indent: 2em;
+  font-size: 30px; 
+  margin: 0;
+}
+
+.at-timeline-item__content {
+  color: #666;
+  font-size: 30px; 
+}
+
+.at-timeline-item__content--sub {
+  color: #0041ff8c;
+  font-size: 28px;
+}
+
+.at-card {
+  margin-bottom: 30px;
+}
+
+.at-card__header-title {
+  font-size: 36px;
 }

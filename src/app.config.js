@@ -3,14 +3,12 @@ export default {
     'pages/login/login',
     'pages/home/home',
     'pages/me/me',
-    'pages/talk/talk',
-    'pages/brief/brief',
+    'pages/apply/apply',
     'pages/fresh/fresh',
     'pages/competition/competition',
     'pages/works/works',
     'pages/member/member',
     'pages/job/job',
-    'pages/info/info',
     'pages/direction/direction'
   ],
   window: {
@@ -31,8 +29,8 @@ export default {
         selectedIconPath: './static/tabbar/index2.png',
       },
       {
-        pagePath: 'pages/talk/talk',
-        text: '讨论',
+        pagePath: 'pages/apply/apply',
+        text: '功能',
         iconPath: './static/tabbar/talk.png',
         selectedIconPath: './static/tabbar/talk2.png',
       },

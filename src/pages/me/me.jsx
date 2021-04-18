@@ -1,61 +1,230 @@
-import { Component } from 'react'
-import { View, Text, Button } from '@tarojs/components'
-import { AtAvatar, AtIcon, AtMessage} from 'taro-ui'
+import React, { Component } from 'react'
+import { View, Text, Image } from '@tarojs/components'
+import { AtAvatar, AtIcon, AtMessage, AtForm, AtInput, AtFloatLayout, AtButton} from 'taro-ui'
 import Taro from '@tarojs/taro'
-import avater from '@/static/avater/20.png'
 import {AppContext} from '@/context'
 import './me.scss'
+const avaterArr = []
+for(let i = 0; i < 20; i++){
+  avaterArr[i] = require('../../static/avater/' + i + '.png')
+}
 
 export default class Me extends Component {
 
   static contextType = AppContext
 
-  toLink = () => {
-    Taro.navigateTo({
-      url: '/pages/member/member',
-      
+  state = {
+    isOpened: false,
+    avaterUrl: avaterArr[0],
+    studentNum: '',
+    password: '',
+    name: '',
+    department: '',     //院系
+    subject: '',         //专业
+    editable: false,     //输入框可编辑吗
+  }
+
+  oldInfo = {}
+
+  componentDidMount(){
+    const {userInfo, avaterUrl} = this.context
+    console.log('componentDidMount')
+    if(userInfo){
+      this.setState({
+        studentNum: userInfo.studentNum,
+        name: userInfo.name,
+        department: userInfo.department,     
+        subject: userInfo.subject, 
+        avaterUrl      
+      })
+    }
+  }
+
+  openEdit = (editable) => {
+    this.setState({
+      editable
     })
   }
 
-  toLogin = () => {
-    const {loginStatus} = this.context
-
-    Taro.navigateTo({
-      url: `/pages/login/login?loginStatus=${loginStatus}`
+  updateAvater = () => {
+    this.setState({
+      isOpened: true
     })
   }
 
+  selectAvater = (index) => {
+    this.setState({
+      avaterUrl: avaterArr[index]
+    })
+  }
 
+  toLogin(){
+    Taro.navigateTo({
+      url: '/pages/login/login'
+    })
+  }
+
+  changeInput = (val, e) => {
+    let key = e.mpEvent.target.id
+    this.setState({
+      [key]: val
+    })
+  }
+
+  updateInfo = () => {
+    const { avaterUrl, password } = this.state
+    const {studentNum} = this.context
+    const { avaterUrl: avaterUrl2, password: password2 } = this.oldInfo
+    if(avaterUrl === avaterUrl2 && password === password2){
+      Taro.atMessage({
+        message: '未做任何修改哦，请继续修改，或者点击取消',
+        type: 'warning'
+      })
+      return
+    }
+    Taro.request({
+      url: 'http://127.0.0.1:3009/login/updateUser',
+      method: 'POST',
+      data: {
+        studentNum,
+        password,
+        avaterUrl
+      },
+      success: (res) => {
+        const {status} = res.data
+        if(status){
+          Taro.atMessage({
+            message: '修改成功',
+            type: 'success'
+          })
+          if(password !== password2){
+            Taro.atMessage({
+              message: '密码已经修改，请重新登陆',
+              type: 'warning'
+            })
+            setTimeout(() => {
+              Taro.redirectTo({
+                url: '/pages/login/login'
+              })
+            }, 1500)
+          } else {
+            this.openEdit(false)
+          }
+        }
+      }
+    })
+  }
+  onClose = () => {
+    this.setState({
+      isOpened: false
+    })
+  }
+ 
   render () {
-    const {loginStatus, userInfo} = this.context
-    let name = '点击登录'  
-    let avaterUrl = avater
-    let showMember = false
-    if(loginStatus !== 0){
-      name = userInfo.name
-      avaterUrl = userInfo.avaterUrl
-    }
-    if(userInfo && userInfo.level == 1){
-      showMember = true
-    }
+    const { isOpened, avaterUrl, 
+      studentNum, password, name, department, subject, editable } = this.state
 
     return (
       <View className='me'>
         <AtMessage />
-        <View className='self' onClick={this.toLogin}>
+        <View className='self'>
           <View className='left'>
-            <AtAvatar circle image={avaterUrl}></AtAvatar>
-            <Text>{name}</Text>
+            <AtAvatar circle image={avaterUrl || avaterArr[0]}></AtAvatar>
+            <Text>{name || 'xxx'}</Text>
           </View>
-          <AtIcon value='chevron-right' size='30' color='#fff'></AtIcon>
-        </View>
-        <View className='label'>
           {
-            showMember && (
-              <View className='other'  onClick={this.toLink}>
-                <View>成员管理</View>
-                <AtIcon value='chevron-right' size='30' color='#fff'></AtIcon>
+            editable && (
+              <View onClick={this.updateAvater}>
+                <Text style={{color: '#06d4cb'}}>点击更换头像</Text>
+                <AtIcon value='chevron-right' size='20' color='#06d4cb'></AtIcon>
               </View>
+            )
+          }
+        </View>
+        <View className='info'>
+          <AtForm className='me_at-form'>
+            <AtInput
+              editable={false}
+              name='studentNum'
+              required
+              title='学号'
+              type='text'
+              placeholder='请输入8位学号'
+              value={studentNum}
+            />
+            {
+              editable && (
+                <AtInput
+                  editable={editable}
+                  name='password'
+                  required
+                  title='密码'
+                  type='password'
+                  placeholder='请输入至少8位密码'
+                  value={password}
+                  onChange={this.changeInput}
+                />
+              )
+            }
+            <AtInput
+              editable={false}
+              name='department'
+              required
+              title='院系'
+              type='text'
+              placeholder='例如：计算机学院'
+              value={department}
+            />
+            <AtInput
+              editable={false}
+              name='subject'
+              required
+              title='专业班级'
+              type='text'
+              placeholder='例如：网络1703'
+              value={subject}
+            />
+          </AtForm>
+          <View className='btn'>
+            {
+              !editable ? (
+                <>
+                  <AtButton 
+                    type='primary' 
+                    size='normal' 
+                    onClick={() => {
+                      //每次修改前保存副本，便于之后判断
+                      this.oldInfo = {
+                        avaterUrl,
+                        password
+                      }
+                      this.openEdit(true)
+                    }}
+                  >修改密码和头像</AtButton>
+                  <AtButton type='primary' size='normal' onClick={this.toLogin}>切换账号</AtButton>
+                </>
+              ) : (
+                <>
+                  <AtButton type='secondary' size='normal' onClick={this.updateInfo}>保存</AtButton>
+                  <AtButton type='secondary' size='normal' onClick={() => this.openEdit(false)}>取消</AtButton>
+                </>
+              )
+            }
+          </View>
+          {
+            //因为这个其实是隐藏了不是没有，这样可以优化一下
+            isOpened && (
+              <AtFloatLayout isOpened={isOpened} onClose={this.onClose} title="请选择一个喜欢的头像吧">
+                <View className='avater_select'>
+                  {
+                    avaterArr.map((val, index) => {
+                      return (
+                        <Image mode='widthFix' src={val} onClick={() => this.selectAvater(index)}></Image>
+                      )
+                    })
+                  }
+                </View>
+              </AtFloatLayout>
             )
           }
         </View>

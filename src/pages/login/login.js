@@ -16,6 +16,7 @@ export default class Login extends React.Component {
    //提交表单
   register = () => {
     const { studentNum, password } = this.state
+    const {updateState} = this.context
     let obj = {
       studentNum, 
       password, 
@@ -42,7 +43,7 @@ export default class Login extends React.Component {
       method: 'POST',
       data: obj,
       success: (res) => {
-        const {status, errmsg} = res.data
+        const {status, errmsg, avaterUrl, level} = res.data
         switch(status){
           case 1: 
             tools.popTip(errmsg, 'error')
@@ -53,10 +54,12 @@ export default class Login extends React.Component {
           case 3:
             tools.popTip(errmsg, 'success')
             //设置全局变量
-            updateStudentNum(studentNum)
+            updateState('studentNum', studentNum)
+            updateState('level', level)
+            updateState('avaterUrl', avaterUrl)
             //跳转
             setTimeout(() => Taro.switchTab({
-              url: `/pages/home/home?studentNum=${studentNum}`
+              url: `/pages/home/home`
             }), 1000)
         }
       }
@@ -65,7 +68,7 @@ export default class Login extends React.Component {
 
   doLogin = () => {
     const {studentNum, password} = this.state
-    const {updateStudentNum} = this.context
+    const {updateState} = this.context
     let obj = {
       studentNum, 
       password
@@ -84,7 +87,7 @@ export default class Login extends React.Component {
       method: 'POST',
       data: obj,
       success: (res) => {
-        const {status, errmsg} = res.data
+        const {status, errmsg, level, avaterUrl} = res.data
         switch(status){
           case 1: 
             tools.popTip(errmsg, 'error')
@@ -98,10 +101,12 @@ export default class Login extends React.Component {
           case 4:
             tools.popTip(errmsg, 'success')
             //设置全局变量
-            updateStudentNum(studentNum)
+            updateState('studentNum', studentNum)
+            updateState('level', level)
+            updateState('avaterUrl', avaterUrl)
             //跳转
             setTimeout(() => Taro.switchTab({
-              url: `/pages/home/home?studentNum=${studentNum}`
+              url: `/pages/home/home`
             }), 1000)
         }
       }
@@ -114,6 +119,13 @@ export default class Login extends React.Component {
       [key]: val
     })
   }
+
+  // // 后面要去掉
+  // componentDidMount(){
+  //   setTimeout(() => Taro.switchTab({
+  //     url: `/pages/home/home?studentNum=04172088`
+  //   }), 500)
+  // }
 
   render(){
     const {studentNum, password} = this.state

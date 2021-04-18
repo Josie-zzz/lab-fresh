@@ -1,7 +1,7 @@
 import { Component } from 'react'
-import { View, Swiper, SwiperItem, Image, Text } from '@tarojs/components'
+import { View, Swiper, SwiperItem, Image } from '@tarojs/components'
+import { AtTimeline, AtCard } from 'taro-ui'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
-import { AtIcon } from 'taro-ui'
 import './home.scss'
 import Card from '@/components/card'
 import {AppContext} from '@/context'
@@ -10,39 +10,14 @@ import {AppContext} from '@/context'
 const pic = ['pic1.jpeg', 'pic2.jpg', 'pic3.jpg']
 const picUrl = pic.map(val => require('../../static/pic/' + val))
 
-//子页面路由
-const pages = [
-  {
-    name: '协会简介',
-    icon: 'list',
-    path: '/pages/brief/brief'
-  },
-  {
-    name: '协会纳新',
-    icon: 'link',
-    path: '/pages/fresh/fresh'
-  },
-  {
-    name: '协会竞赛',
-    icon: 'lightning-bolt',
-    path: '/pages/competition/competition'
-  },
-  {
-    name: '成果展示',
-    icon: 'file-code',
-    path: '/pages/works/works'
-  },
-  {
-    name: '就业管理',
-    icon: 'credit-card',
-    path: '/pages/job/job'
-  },
-]
-
 export default class Home extends Component {
   static contextType = AppContext
 
   state = {
+    brief: '', 
+    history: null,
+    group: null, 
+    standard: null
   }
 
   toLink(path){
@@ -52,20 +27,47 @@ export default class Home extends Component {
   }
 
   componentDidMount(){
-    const {studentNum, updateUser} =this.context
+    const {studentNum, updateState} = this.context
+    let num = '04172088'
+    //请求登陆用户的信息
     Taro.request({
-      url: `http://127.0.0.1:3009/login/info?studentNum=${studentNum}`,
+      url: `http://127.0.0.1:3009/login/info?studentNum=${num}`,
       success(res){
         const {status, userInfo} = res.data
         if(status){
-          updateUser(userInfo)
+          updateState('userInfo', userInfo)
         }
       }
     })
+
+    // 请求简介数据
+    Taro.request({
+      url: 'http://127.0.0.1:3009/brief',
+      success: (res) => {
+        const {brief} = res.data
+        delete brief._id
+        this.setState({
+          ...brief, 
+          history: [...brief.history, {
+            time: '至今',
+            content: '协会不断注入新鲜血液， 协会的故事还在继续...'
+          }]
+        })
+      } 
+    })
+    
+    
   }
 
   render () {
-    const {  } = this.state
+    const { brief, history, group, standard } = this.state
+    let items = null
+    if(history){
+      items = history.map(val => ({
+        title: val.content,
+        content: [val.time]
+      }))
+    }
     return (
       <View className='home'>
         <Swiper
@@ -83,28 +85,37 @@ export default class Home extends Component {
             ))
           }
         </Swiper>
-        <Card title='功能展示'>
-          <View className='many-page'>
+          <Card title='协会简介'>
+            <View className='at-article__p at-article__jianjie'>
+              {brief}
+            </View>
+          </Card>
+          <Card title='协会发展史'>
             {
-              pages.map((val, index) => {
-                let color = '#4e73ba'
-                if(index % 2 !== 0){
-                  color = '#89acee'
-                }
-
-                return (
-                  <View className='box' style={{backgroundColor: color}} onClick={() => this.toLink(val.path)}>
-                    <View className='left'>
-                      <AtIcon className='icon' value={val.icon} color='#fff' size='24'></AtIcon>
-                      <Text>{val.name}</Text>
-                    </View>
-                    <AtIcon value='chevron-right' size='30' color='#fff'></AtIcon>
-                  </View>
-                )
-              })
+              items && (
+                <AtTimeline 
+                  pending 
+                  style={{fontSize: '30rpx'}}
+                  items={items}></AtTimeline>
+              )
             }
-          </View>
-        </Card>
+          </Card>
+          <Card title='小组简介'>
+            {
+              group && group.map(v => (<AtCard
+                title={v.name}
+              >
+                <View className='group'>{v.content}</View>
+              </AtCard>))
+            }
+          </Card>
+          <Card title='协会规章制度'>
+          {
+              standard && standard.map((v, index) => (
+                <View className='standard'>{index + 1 + '. ' + v}</View>
+              ))
+            }
+          </Card>
       </View>
     )
   }

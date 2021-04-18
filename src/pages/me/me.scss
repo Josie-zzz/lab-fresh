@@ -12,38 +12,34 @@
     .left {
       display: flex;
       align-items: center;
+
+      text {
+        color: #fff;
+        margin-left: 30px;
+        font-size: 36px;
+      }
     }
 
-    text {
-      color: #fff;
-      margin-left: 30px;
-      font-size: 36px;
+  }
+  .info {
+    .me_at-form {
+      margin-bottom: 30px !important;
+    }
+
+    .btn .at-button {
+      margin-bottom: 10px;
     }
   }
 
-  .label {
-    margin-top: 20px;
-    
-    .other {
-      height: 70px;
-      padding: 30px;
-      color: #fff;
-      font-size: 36px;
-      background-color: #89acee;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+  .avater_select {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    image {
+      width: 15%;
+      margin: 30px;
     }
   }
   
-  .login_content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    .at-icon {
-      display: block;
-    }
-  }
 }

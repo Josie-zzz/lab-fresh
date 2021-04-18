@@ -9,20 +9,26 @@ class App extends Component {
     //全局变量设置
     this.state = {
       userInfo: null,   //记录用户信息
-      studentNum: '',
+      level: -1,        //用户等级
+      studentNum: '',   //用户id，Taro.switchTab切换路由不能传参
+      avaterUrl: ''     //当前用户头像
     }
   }
 
-  updateUser = (userInfo) => {
-    this.setState({
-      userInfo
-    })
-  }
-
-  updateStudentNum = (studentNum) => {
-    this.setState({
-      studentNum
-    })
+  updateState = (state, val) => {
+    try {
+      const thisState = this.state
+      if(thisState.hasOwnProperty(state)){
+        this.setState({
+          [state]: val
+        })
+        return
+      }
+      throw new ReferenceError(`${state} is not defined in this.state`)
+    } catch(e) {
+      console.log(e)
+    }
+    
   }
 
   componentDidShow () {}
@@ -35,8 +41,7 @@ class App extends Component {
   render () {
     let obj = {
       ...this.state, 
-      updateUser: this.updateUser,
-      updateStudentNum: this.updateStudentNum
+      updateState: this.updateState,
     }
     return (
       <AppContext.Provider value={obj}>
