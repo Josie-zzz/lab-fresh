@@ -8,7 +8,7 @@ class App extends Component {
     super()
     //全局变量设置
     this.state = {
-      userInfo: null,   //记录用户信息
+      userInfo: {},   //记录用户信息
       level: -1,        //用户等级
       studentNum: '',   //用户id，Taro.switchTab切换路由不能传参
       avaterUrl: ''     //当前用户头像
@@ -43,6 +43,7 @@ class App extends Component {
       ...this.state, 
       updateState: this.updateState,
     }
+    // console.log(obj)
     return (
       <AppContext.Provider value={obj}>
         {this.props.children}

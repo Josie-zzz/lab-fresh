@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from '@tarojs/components'
+import { View, Text, Image, Button } from '@tarojs/components'
 import { AtAvatar, AtIcon, AtMessage, AtForm, AtInput, AtFloatLayout, AtButton} from 'taro-ui'
 import Taro from '@tarojs/taro'
 import {AppContext} from '@/context'
 import './me.scss'
+import defaultAvater from '@/static/avater/defaultAvater.png'
 const avaterArr = []
 for(let i = 0; i < 20; i++){
   avaterArr[i] = require('../../static/avater/' + i + '.png')
@@ -16,29 +17,10 @@ export default class Me extends Component {
   state = {
     isOpened: false,
     avaterUrl: avaterArr[0],
-    studentNum: '',
-    password: '',
-    name: '',
-    department: '',     //院系
-    subject: '',         //专业
     editable: false,     //输入框可编辑吗
   }
 
   oldInfo = {}
-
-  componentDidMount(){
-    const {userInfo, avaterUrl} = this.context
-    console.log('componentDidMount')
-    if(userInfo){
-      this.setState({
-        studentNum: userInfo.studentNum,
-        name: userInfo.name,
-        department: userInfo.department,     
-        subject: userInfo.subject, 
-        avaterUrl      
-      })
-    }
-  }
 
   openEdit = (editable) => {
     this.setState({
@@ -53,9 +35,8 @@ export default class Me extends Component {
   }
 
   selectAvater = (index) => {
-    this.setState({
-      avaterUrl: avaterArr[index]
-    })
+    const { updateState } = this.context
+    updateState('avaterUrl', avaterArr[index])
   }
 
   toLogin(){
@@ -65,15 +46,13 @@ export default class Me extends Component {
   }
 
   changeInput = (val, e) => {
+    const { updateState, userInfo } = this.context
     let key = e.mpEvent.target.id
-    this.setState({
-      [key]: val
-    })
+    updateState(userInfo, {...userInfo, [key]: val})
   }
 
   updateInfo = () => {
-    const { avaterUrl, password } = this.state
-    const {studentNum} = this.context
+    const { studentNum, avaterUrl, password } = this.context
     const { avaterUrl: avaterUrl2, password: password2 } = this.oldInfo
     if(avaterUrl === avaterUrl2 && password === password2){
       Taro.atMessage({
@@ -121,15 +100,16 @@ export default class Me extends Component {
   }
  
   render () {
-    const { isOpened, avaterUrl, 
-      studentNum, password, name, department, subject, editable } = this.state
+    const { isOpened, editable } = this.state
+    const { studentNum, userInfo, avaterUrl } = this.context 
+    const { password, name, department, subject } = userInfo
 
     return (
       <View className='me'>
         <AtMessage />
         <View className='self'>
           <View className='left'>
-            <AtAvatar circle image={avaterUrl || avaterArr[0]}></AtAvatar>
+            <AtAvatar circle image={avaterUrl || defaultAvater}></AtAvatar>
             <Text>{name || 'xxx'}</Text>
           </View>
           {
@@ -161,7 +141,7 @@ export default class Me extends Component {
                   title='密码'
                   type='password'
                   placeholder='请输入至少8位密码'
-                  value={password}
+                  value={password || ''}
                   onChange={this.changeInput}
                 />
               )
@@ -173,7 +153,7 @@ export default class Me extends Component {
               title='院系'
               type='text'
               placeholder='例如：计算机学院'
-              value={department}
+              value={department || ''}
             />
             <AtInput
               editable={false}
@@ -182,7 +162,7 @@ export default class Me extends Component {
               title='专业班级'
               type='text'
               placeholder='例如：网络1703'
-              value={subject}
+              value={subject || ''}
             />
           </AtForm>
           <View className='btn'>

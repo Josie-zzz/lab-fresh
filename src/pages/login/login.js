@@ -16,7 +16,6 @@ export default class Login extends React.Component {
    //提交表单
   register = () => {
     const { studentNum, password } = this.state
-    const {updateState} = this.context
     let obj = {
       studentNum, 
       password, 
@@ -54,13 +53,7 @@ export default class Login extends React.Component {
           case 3:
             tools.popTip(errmsg, 'success')
             //设置全局变量
-            updateState('studentNum', studentNum)
-            updateState('level', level)
-            updateState('avaterUrl', avaterUrl)
-            //跳转
-            setTimeout(() => Taro.switchTab({
-              url: `/pages/home/home`
-            }), 1000)
+            this.loginNext(studentNum, level, avaterUrl)
         }
       }
     })
@@ -68,7 +61,6 @@ export default class Login extends React.Component {
 
   doLogin = () => {
     const {studentNum, password} = this.state
-    const {updateState} = this.context
     let obj = {
       studentNum, 
       password
@@ -100,14 +92,32 @@ export default class Login extends React.Component {
             break
           case 4:
             tools.popTip(errmsg, 'success')
-            //设置全局变量
-            updateState('studentNum', studentNum)
-            updateState('level', level)
-            updateState('avaterUrl', avaterUrl)
-            //跳转
-            setTimeout(() => Taro.switchTab({
-              url: `/pages/home/home`
-            }), 1000)
+            this.loginNext(studentNum, level, avaterUrl)
+        }
+      }
+    })
+  }
+
+  //设置全局变量和请求用户信息，跳转
+  loginNext = (studentNum, level, avaterUrl) => {
+    const {updateState} = this.context
+
+    updateState('studentNum', studentNum)
+    updateState('level', level)
+    updateState('avaterUrl', avaterUrl)
+
+    //请求登陆用户的信息
+    Taro.request({
+      url: `http://127.0.0.1:3009/login/info?studentNum=${studentNum}`,
+      success(res){
+        const {status, userInfo} = res.data
+        if(status){
+          updateState('userInfo', userInfo)
+
+          //跳转
+          setTimeout(() => Taro.switchTab({
+            url: `/pages/home/home`
+          }), 1000)
         }
       }
     })
@@ -119,13 +129,6 @@ export default class Login extends React.Component {
       [key]: val
     })
   }
-
-  // // 后面要去掉
-  // componentDidMount(){
-  //   setTimeout(() => Taro.switchTab({
-  //     url: `/pages/home/home?studentNum=04172088`
-  //   }), 500)
-  // }
 
   render(){
     const {studentNum, password} = this.state

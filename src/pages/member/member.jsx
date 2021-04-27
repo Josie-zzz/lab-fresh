@@ -37,13 +37,14 @@ export default class Member extends React.Component {
   }
 
   componentDidMount(){
-    const {userInfo} = this.context
+    // const {studentNum} = this.context
+    let studentNum = '04172088'
     Taro.request({
-      url: `http://127.0.0.1:3009/login/member?studentNum=${userInfo.studentNum}`,
+      url: `http://127.0.0.1:3009/login/member?studentNum=${studentNum}`,
       method: 'GET',
       success: (res) => {
         const {status, users} = res.data
-        // console.log(res)
+        console.log(res)
         this.setState({
           users
         })

@@ -27,18 +27,8 @@ export default class Home extends Component {
   }
 
   componentDidMount(){
-    const {studentNum, updateState} = this.context
-    let num = '04172088'
-    //请求登陆用户的信息
-    Taro.request({
-      url: `http://127.0.0.1:3009/login/info?studentNum=${num}`,
-      success(res){
-        const {status, userInfo} = res.data
-        if(status){
-          updateState('userInfo', userInfo)
-        }
-      }
-    })
+    // const {studentNum, updateState} = this.context
+    
 
     // 请求简介数据
     Taro.request({
