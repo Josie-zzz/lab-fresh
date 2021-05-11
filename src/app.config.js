@@ -1,6 +1,6 @@
 export default {
   pages: [
-    'pages/member/member',
+    // 'pages/member/member',
     'pages/login/login',
     'pages/home/home',
     'pages/me/me',
@@ -8,7 +8,7 @@ export default {
     'pages/fresh/fresh',
     'pages/competition/competition',
     'pages/works/works',
-    // 'pages/member/member',
+    'pages/member/member',
     'pages/job/job',
     'pages/direction/direction'
   ],

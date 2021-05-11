@@ -4,13 +4,14 @@ import { AtButton, AtInput, AtMessage } from 'taro-ui'
 import React from 'react'
 import './login.scss'
 import {AppContext} from '@/context'
+import { URL} from '@/url'
 
 export default class Login extends React.Component {
   static contextType = AppContext
 
   state = {
-    studentNum: '',
-    password: ''
+    studentNum: '04172088',
+    password: '04172088'
   }
 
    //提交表单
@@ -38,7 +39,7 @@ export default class Login extends React.Component {
     }
 
     Taro.request({
-      url: 'http://127.0.0.1:3009/login/register',
+      url: URL.register,
       method: 'POST',
       data: obj,
       success: (res) => {
@@ -75,7 +76,7 @@ export default class Login extends React.Component {
     }
 
     Taro.request({
-      url: 'http://127.0.0.1:3009/login/doLogin',
+      url: URL.doLogin,
       method: 'POST',
       data: obj,
       success: (res) => {
@@ -108,7 +109,7 @@ export default class Login extends React.Component {
 
     //请求登陆用户的信息
     Taro.request({
-      url: `http://127.0.0.1:3009/login/info?studentNum=${studentNum}`,
+      url: `${URL.info}?studentNum=${studentNum}`,
       success(res){
         const {status, userInfo} = res.data
         if(status){

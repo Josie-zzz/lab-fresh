@@ -4,7 +4,6 @@ import { View, Button, Text } from '@tarojs/components'
 import './apply.scss'
 import { AtIcon } from 'taro-ui'
 import {AppContext} from '@/context'
-import Card from '@/components/card'
 
 //子页面路由
 const pages = [

@@ -3,8 +3,9 @@ import { View, Swiper, SwiperItem, Image } from '@tarojs/components'
 import { AtTimeline, AtCard } from 'taro-ui'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import './home.scss'
-import Card from '@/components/card'
+import { Card } from '@/components'
 import {AppContext} from '@/context'
+import { URL} from '@/url'
 
 //轮播图，后期有时间可以做成请求后端接口的
 const pic = ['pic1.jpeg', 'pic2.jpg', 'pic3.jpg']
@@ -32,7 +33,7 @@ export default class Home extends Component {
 
     // 请求简介数据
     Taro.request({
-      url: 'http://127.0.0.1:3009/brief',
+      url: URL.brief,
       success: (res) => {
         const {brief} = res.data
         delete brief._id

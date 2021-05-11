@@ -23,13 +23,12 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
     },
-    "enableEngineNative": false,
     "bundle": false,
     "useIsolateContext": true,
     "useCompilerModule": true,
@@ -41,5 +40,55 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.16.0",
-  "condition": {}
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {
+    "search": {
+      "list": []
+    },
+    "conversation": {
+      "list": []
+    },
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "id": -1,
+          "name": "pages/competition/competition",
+          "pathName": "pages/competition/competition",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/fresh/fresh",
+          "pathName": "pages/fresh/fresh",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/member/member",
+          "pathName": "pages/member/member",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/job/job",
+          "pathName": "pages/job/job",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
 }

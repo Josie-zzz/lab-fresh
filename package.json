@@ -43,7 +43,7 @@
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "taro-ui": "^3.0.0-alpha.3",
-    "taro3-table": "^1.0.21"
+    "taro3-table": "^1.0.25"
   },
   "devDependencies": {
     "@types/webpack-env": "^1.13.6",

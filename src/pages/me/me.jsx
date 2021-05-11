@@ -3,7 +3,9 @@ import { View, Text, Image, Button } from '@tarojs/components'
 import { AtAvatar, AtIcon, AtMessage, AtForm, AtInput, AtFloatLayout, AtButton} from 'taro-ui'
 import Taro from '@tarojs/taro'
 import {AppContext} from '@/context'
+import { URL} from '@/url'
 import './me.scss'
+
 import defaultAvater from '@/static/avater/defaultAvater.png'
 const avaterArr = []
 for(let i = 0; i < 20; i++){
@@ -48,11 +50,13 @@ export default class Me extends Component {
   changeInput = (val, e) => {
     const { updateState, userInfo } = this.context
     let key = e.mpEvent.target.id
-    updateState(userInfo, {...userInfo, [key]: val})
+    updateState('userInfo', {...userInfo, [key]: val})
   }
 
   updateInfo = () => {
-    const { studentNum, avaterUrl, password } = this.context
+    console.log(this.context)
+    // debugger
+    const { studentNum, avaterUrl, userInfo: { password } } = this.context
     const { avaterUrl: avaterUrl2, password: password2 } = this.oldInfo
     if(avaterUrl === avaterUrl2 && password === password2){
       Taro.atMessage({
@@ -62,7 +66,7 @@ export default class Me extends Component {
       return
     }
     Taro.request({
-      url: 'http://127.0.0.1:3009/login/updateUser',
+      url: URL.updateUser,
       method: 'POST',
       data: {
         studentNum,

@@ -1,0 +1,50 @@
+{
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "id": -1,
+          "name": "pages/competition/competition",
+          "pathName": "pages/competition/competition",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/fresh/fresh",
+          "pathName": "pages/fresh/fresh",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/member/member",
+          "pathName": "pages/member/member",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/job/job",
+          "pathName": "pages/job/job",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/works/works",
+          "pathName": "pages/works/works",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

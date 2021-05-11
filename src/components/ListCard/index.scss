@@ -1,0 +1,24 @@
+.list-card {
+  width: 100%;
+  padding: 30px;
+  box-sizing: border-box;
+  font-size: 36px;
+  background-color: #fff;
+  border-radius: 50px;
+  margin: 10px 0;
+  color: #fff;
+
+  .title {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    color: rgb(68, 215, 241);
+  }
+
+  .txt {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+}
