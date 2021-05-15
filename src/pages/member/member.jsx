@@ -3,7 +3,7 @@ import {AppContext} from '@/context'
 import Taro from '@tarojs/taro'
 import {AtAccordion, AtList, AtListItem, AtIcon, AtSearchBar,
    AtButton, AtModal, AtRadio, AtForm, AtMessage } from 'taro-ui'
-import {View, Picker, Button} from '@tarojs/components'
+import {View, Picker} from '@tarojs/components'
 import { Modal, AddBtn } from '@/components'
 import { URL} from '@/url'
 import './member.scss'
@@ -16,6 +16,7 @@ const options = [
   { label: 'LV1', value: 1, desc: '拥有所有权限，所有子系统管理权限' },
   { label: 'LV2', value: 2, desc: '可以查看子系统的资料内容等，但不可以编辑'}
 ]
+const groupMap = ['web开发组', '技术运维组', '视觉设计组', '网络安全组', '产品&运营组']
 
 export default class Member extends React.Component {
   static contextType = AppContext
@@ -33,6 +34,7 @@ export default class Member extends React.Component {
     isOpenedDel: false,   //删除的模态框显示否
     isOpenedAdd: false,   //添加的模态框显示否
     selectLevel: -1,      //被选中的权限值
+    groupCurt: 0,       //当前被选中的组
   }
 
   componentDidMount(){
@@ -167,6 +169,10 @@ export default class Member extends React.Component {
               title={user.subject}
               note='专业班级'
             />
+            <AtListItem
+              title={groupMap[user.groupInfo.group]}
+              note='归属小组'
+            />
           </AtList>
           <View className='btns'>
             <AtButton  type='primary' onClick={() => this.showChangeLevel(true)}>修改权限</AtButton>
@@ -272,7 +278,7 @@ export default class Member extends React.Component {
   //点击确认添加成员
   requestMember = () => {
     const { studentNum } = this.context
-    const { searchInfo } = this.state
+    const { searchInfo, groupCurt } = this.state
     if(!searchInfo){
       Taro.atMessage({
         message: '请先搜索需要添加的成员',
@@ -285,7 +291,10 @@ export default class Member extends React.Component {
       method: 'POST',
       data: {
         operator: studentNum,
-        user: searchInfo.studentNum
+        user: searchInfo.studentNum,
+        groupInfo: {
+          group: groupCurt
+        },
       },
       success: (res) => {
         const { status, errmsg} = res.data
@@ -355,9 +364,16 @@ export default class Member extends React.Component {
     })
   }
 
+  //选择小组变化
+  groupChange = (e) => {
+    this.setState({
+      groupCurt: +e.detail.value
+    })
+  }
+
   render(){
     const {user, showUsers, search, searchInfo, searchNum, checked, 
-      isOpened, isOpenedDel, isOpenedAdd, selectLevel} = this.state
+      isOpened, isOpenedDel, isOpenedAdd, selectLevel, groupCurt} = this.state
 
       return (
         <View className='member'>
@@ -417,6 +433,14 @@ export default class Member extends React.Component {
                 isOpened={isOpenedAdd}
                 contentDOM = {(
                   <>
+                    <Picker className='search' mode='selector' range={groupMap} onChange={this.groupChange}>
+                      <AtList>
+                        <AtListItem
+                          title='选择小组'
+                          extraText={groupMap[groupCurt]}
+                        />
+                      </AtList>
+                    </Picker>
                     <AtSearchBar
                       showActionButton
                       value={searchNum}

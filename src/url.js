@@ -33,4 +33,8 @@ export const URL = {
   freshDel: `${HOST}fresh/delete`,
   //修改面试状态和小组
   freshUpdate: `${HOST}fresh/update`,
+  //成员就业
+  jobAll: `${HOST}job/all`,
+  //更新就业信息
+  updJobInfo: `${HOST}job/update`,
 }
