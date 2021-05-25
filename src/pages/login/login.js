@@ -56,6 +56,7 @@ export default class Login extends React.Component {
             //设置全局变量
             this.loginNext(studentNum, level, avaterUrl)
         }
+        console.log(res.data)
       }
     })
   }
@@ -81,6 +82,7 @@ export default class Login extends React.Component {
       data: obj,
       success: (res) => {
         const {status, errmsg, level, avaterUrl} = res.data
+        console.log(res.data)
         switch(status){
           case 1: 
             tools.popTip(errmsg, 'error')

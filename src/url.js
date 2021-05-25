@@ -2,7 +2,7 @@ const HOST = 'http://127.0.0.1:3009/'
 //内网地址
 // const HOST = 'http://172.20.10.2:3009/'
 //家 内网
-// const HOST = 'http://192.168.10.8:3009/'
+// const HOST = 'http://192.168.10.7:3009/'
 
 export const URL = {
   //首页各种介绍
@@ -26,15 +26,23 @@ export const URL = {
   //搜索在校生信息
   studentInfo: `${HOST}user/studentInfo`,
   //纳新所有信息
-  freshAll: `${HOST}fresh/all`,
+  freshData: `${HOST}fresh/data`,
   //纳新增加
   freshAdd: `${HOST}fresh/add`,
   //删除
   freshDel: `${HOST}fresh/delete`,
-  //修改面试状态和小组
+  //修改信息
   freshUpdate: `${HOST}fresh/update`,
   //成员就业
   jobAll: `${HOST}job/all`,
   //更新就业信息
   updJobInfo: `${HOST}job/update`,
+  //请求竞赛和成果的信息
+  compData: `${HOST}comp/data`,
+  //添加竞赛或者成果
+  compAdd: `${HOST}comp/add`,
+  //删除
+  compDel: `${HOST}comp/del`,
+  // 修改
+  compUpd: `${HOST}comp/update`,
 }

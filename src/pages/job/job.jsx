@@ -270,6 +270,12 @@ export default class Job extends React.Component {
   render(){
     const { checked, search, showDataSource, isOpened, userCurt,
       jobInfo } = this.state
+    const loginLevel = this.context.level
+
+    if(loginLevel !== 1){
+      return <View>目前只对管理开放</View>
+    }
+    
     return (
       <View className='job'>
         <AtMessage />
@@ -297,7 +303,8 @@ export default class Job extends React.Component {
           dataSource={showDataSource}
           scroll={{x: true, y: true}}
         />
-        <Modal
+        {
+          isOpened && <Modal
           header = {`请添加${userCurt ? userCurt.name : 'xxx'}相关的就业信息`}
           isOpened={isOpened}
           contentDOM = {(
@@ -359,6 +366,8 @@ export default class Job extends React.Component {
           onOk={this.submitIpt}
           onCancel={() => this.closeModal(false)}
         />
+        }
+        
       </View>
     )
   }

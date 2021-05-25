@@ -374,6 +374,11 @@ export default class Member extends React.Component {
   render(){
     const {user, showUsers, search, searchInfo, searchNum, checked, 
       isOpened, isOpenedDel, isOpenedAdd, selectLevel, groupCurt} = this.state
+      const loginLevel = this.context.level
+
+      if(loginLevel !== 1){
+        return <View>目前只对管理开放</View>
+      }
 
       return (
         <View className='member'>

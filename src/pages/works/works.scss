@@ -1,0 +1,18 @@
+.work {
+  .self-works {
+    height: 80px;
+    color: #0072ffe8;
+    padding: 20px;
+    border-bottom: 2px dashed #0073ff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      width: 80%;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

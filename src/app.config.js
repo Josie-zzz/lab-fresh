@@ -1,6 +1,5 @@
 export default {
   pages: [
-    // 'pages/member/member',
     'pages/login/login',
     'pages/home/home',
     'pages/me/me',
@@ -10,7 +9,8 @@ export default {
     'pages/works/works',
     'pages/member/member',
     'pages/job/job',
-    'pages/direction/direction'
+    'pages/direction/direction',
+    'pages/other/other',
   ],
   window: {
     backgroundTextStyle: 'light',
