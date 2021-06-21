@@ -46,7 +46,7 @@ export default class Work extends React.Component {
   todedail = (obj) => {
     const { type } = this.state
     Taro.navigateTo({
-      url: `/pages/other/other?type=${type}&_id=${obj._id}`,
+      url: `/pages/other/other?type=${type}&_id=${obj._id}&studentNum=${obj.studentNum}`,
     })
   }
 
@@ -81,7 +81,7 @@ export default class Work extends React.Component {
           {
             (selfList && selfList.length) ? (
               selfList.map(val => (
-                <View className='self-works'>
+                <View className='self-works' onClick={() => this.todedail(val)}>
                   <View className='title'>{val.title}</View>
                   <AtIcon value='chevron-right' size='30' color='#0072ffe8'></AtIcon>
                 </View>

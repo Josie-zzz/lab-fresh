@@ -273,9 +273,9 @@ export default class Job extends React.Component {
     const loginLevel = this.context.level
 
     if(loginLevel !== 1){
-      return <View>目前只对管理开放</View>
+      return <View>目前只对管理员开放</View>
     }
-    
+
     return (
       <View className='job'>
         <AtMessage />

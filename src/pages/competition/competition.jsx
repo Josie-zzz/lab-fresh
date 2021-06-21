@@ -4,7 +4,10 @@ import { View } from "@tarojs/components"
 import { AtTextarea } from 'taro-ui'
 import { ListCard, AddBtn, Modal } from '@/components'
 import { URL } from '@/url'
+import {AppContext} from '@/context'
 export default class Competition extends React.Component {
+  static contextType = AppContext
+
   state = {
     list: null,   //展示列表
     isOpened: true,    //弹框显隐
@@ -37,8 +40,18 @@ export default class Competition extends React.Component {
     })
   }
 
+  //跳转页面，查看详情
+  todedail = (obj) => {
+    const { type } = this.state
+    Taro.navigateTo({
+      url: `/pages/other/other?type=${type}&_id=${obj._id}&studentNum=${obj.studentNum}`,
+    })
+  }
+
   render(){
     const { list } = this.state
+    const { level } = this.context
+
     return (
       <View className='competiton'>
         {
@@ -48,11 +61,14 @@ export default class Competition extends React.Component {
                 style={{backgroundColor: '#4e73ba'}} 
                 title={val.title}
                 txt={val.txt}
+                onClick={() => this.todedail(val)}
               />
             )
           })
         }
-        <AddBtn onClick={this.toLink} />
+        {
+          level != 3 && <AddBtn onClick={this.toLink} />
+        }
       </View>
     )
   }

@@ -1,0 +1,24 @@
+.other {
+  height: 100%;
+  background-color: #fff;
+
+  .del {
+    position: fixed;
+    bottom: 0;
+    width: 50%;
+  }
+
+  .update {
+    position: fixed;
+    bottom: 0;
+    width: 50%;
+    right: 0;
+  }
+
+  .at-article {
+    height: 100%;
+    padding-bottom: 100px;
+    box-sizing: border-box;
+    overflow: scroll;
+  }
+}

@@ -1,19 +1,26 @@
 import React from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
-import { View } from "@tarojs/components"
-import { AtButton, AtTextarea, AtMessage } from 'taro-ui'
+import { View, Button } from "@tarojs/components"
+import { AtButton, AtTextarea, AtMessage, AtModal } from 'taro-ui'
 import {AppContext} from '@/context'
 import { URL } from '@/url'
+import './other.scss'
 
 export default class Competition extends React.Component {
   static contextType = AppContext
 
   constructor(){
     super()
+    let { params: {_id} } = getCurrentInstance().router
+    let isEdit = _id ? false : true
+
     this.state = {
       title: '',      //编辑的标题
       txt: '',        //编辑的内容
-      dedail: null,   //显示详情的内容
+      detail: null,   //显示详情的内容
+      isOpenedDel: false,  //是否显示删除框 
+      isEdit,        //是否是添加文字状态，否则就是展示文章状态
+      isUpdate: false,    //是否在修改，和添加用的是一个编辑
     }
   }
 
@@ -30,7 +37,7 @@ export default class Competition extends React.Component {
           const {status, errmsg, comp} = res.data
           if(status){
             this.setState({
-              dedail: comp[0]
+              detail: comp[0]
             })
           }
         }
@@ -47,7 +54,7 @@ export default class Competition extends React.Component {
 
   //提交表单信息
   submitComp = () => {
-    const { title, txt} = this.state
+    const { title, txt, isUpdate, detail} = this.state
     const {params: {type}} = getCurrentInstance().router
     const { userInfo } = this.context
     if(!title){
@@ -63,14 +70,42 @@ export default class Competition extends React.Component {
       })
       return
     }
-    console.log({
-      type: +type,
-      title,
-      txt,
-      creator: userInfo.name,
-      studentNum: userInfo.studentNum,
-      createTime: Date.now().toString()
-    })
+    //需要判断当前是否是编辑，否则就新增
+    if(isUpdate){
+      Taro.request({
+        url: URL.compUpd,
+        method: 'POST',
+        data: {
+          _id: detail._id,
+          comp: {
+            title,
+            txt,
+            modifiter: userInfo.name,
+            updTime: Date.now().toString()
+          }
+        },
+        success: (res) => {
+          const { status, errmsg} = res.data
+          if(status){
+            Taro.atMessage({
+              message: errmsg,
+              type: 'success',
+            })
+            //添加成功后跳转回去
+            setTimeout(() => {
+              let index = 'works'
+              if(type == 1){
+                index = 'competition'
+              }
+              Taro.navigateBack({
+                url: `/pages/${index}/${index}`,
+              })
+            }, 1000)
+          }
+        }
+      })
+      return 
+    }
     Taro.request({
       url: URL.compAdd,
       method: 'POST',
@@ -106,29 +141,110 @@ export default class Competition extends React.Component {
     })
   }
 
-  render(){
-    const { title, txt, dedail } = this.state
-    let { params: {_id} } = getCurrentInstance().router
+  //删除文章
+  delArticle = () => {
+    const { detail } = this.state
+    const {params: {type}} = getCurrentInstance().router
+    
+    Taro.request({
+      url: URL.compDel,
+      data: {
+        _id: detail._id
+      },
+      success: (res) => {
+        const { status, errmsg} = res.data
+        if(status){
+          Taro.atMessage({
+            message: errmsg,
+            type: 'success',
+          })
+          //添加成功后跳转回去
+          setTimeout(() => {
+            let index = 'works'
+            if(type == 1){
+              index = 'competition'
+            }
+            Taro.navigateBack({
+              url: `/pages/${index}/${index}`,
+            })
+          }, 1000)
+        }
+      }
+    })
+    
+  }
 
+  //编辑文章
+  updArticle = () => {
+    const { detail } = this.state
+    this.setState({
+      isEdit: true,
+      isUpdate: true,
+      title: detail.title,
+      txt: detail.txt,
+    })
+  }
+
+  render(){
+    const { title, txt, detail, isOpenedDel, isEdit } = this.state
+    let { params: { type, studentNum} } = getCurrentInstance().router
+    const { level, studentNum: studentNum2 } = this.context
+    
     //有_id是查询，没有是展示
-    if(_id){
-      console.log(dedail)
-      return dedail ? (
-        <View className='at-article' style={{height: '100%', backgroundColor: '#fff'}}>
-          <View className='at-article__h1' style={{marginTop: 0, paddingTop: '30rpx'}}>
-            {dedail.title}
+    if(!isEdit){
+      console.log(detail)
+      return detail ? (
+        <View className='other'>
+          <AtMessage /> 
+          <View className='at-article'>
+            <View className='at-article__h1' style={{marginTop: 0, paddingTop: '30rpx'}}>
+              {detail.title}
+            </View>
+            <View className='at-article__info' style={{color: '#908e8e'}}>
+              {changeTime(detail.createTime)}&nbsp;&nbsp;&nbsp;{detail.creator}
+            </View>
+            {
+              detail.modifiter && detail.updTime && (
+                <View className='at-article__info' style={{color: '#908e8e'}}>
+                  最后的修改：{changeTime(detail.updTime)}&nbsp;&nbsp;&nbsp;{detail.modifiter}
+                </View>
+              )
+            }
+            <View className='at-article__p' style={{fontSize: '30rpx'}}>
+              {detail.txt}
+            </View>
           </View>
-          <View className='at-article__info' style={{color: '#908e8e'}}>
-            {changeTime(dedail.createTime)}&nbsp;&nbsp;&nbsp;{dedail.creator}
-          </View>
-          <View className='at-article__p' style={{fontSize: '30rpx'}}>
-            {dedail.txt}
-          </View>
+          {
+            (level == 1 || studentNum2 == studentNum) && (
+              <>
+                <Button type='warn' className='del' 
+                  onClick={() => {
+                    this.setState({
+                      isOpenedDel: true
+                    })
+                  }}>删除</Button>
+                <Button type='primary' className='update' onClick={this.updArticle}>修改</Button>
+              </>
+            )
+          }
+          {/* 删除成员 */}
+          <AtModal
+            isOpened={isOpenedDel}
+            cancelText='取消'
+            confirmText='确认'
+            onConfirm={ this.delArticle }
+            onCancel={ () => {
+              this.setState({
+                isOpenedDel: false
+              })
+            }}
+            content={`你确定要删除这篇文章吗？`}
+          />
         </View>
       ) : (<View>稍等，正在请求中...</View>)
     } else {
       return (
-        <View>
+        <View className='other'>
           <AtMessage />
           <View style={{padding: 10}}>标题：</View>
           <AtTextarea
